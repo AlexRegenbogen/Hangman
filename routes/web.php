@@ -10,15 +10,15 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
-$app->get('/', function () use ($app) {
+$router->get('/', function () {
     return view('game');
 });
 
 
 
 // games
-$app->post('/games', 'GameController@startNewGame');
+$router->post('games', 'GameController@startNewGame');
 
 
 // games/[:id]
-$app->put('/games/{id}', 'GameController@guess');
+$router->put('games/{id}', 'GameController@guess');
