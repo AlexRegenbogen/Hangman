@@ -21,5 +21,7 @@ abstract class Job implements SelfHandling, ShouldQueue
     |
     */
 
-    use InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 }

@@ -1,19 +1,26 @@
 {
     "name": "laravel/lumen",
     "description": "The Laravel Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen"],
+    "keywords": [
+        "framework",
+        "laravel",
+        "lumen"
+    ],
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.5.9",
-        "laravel/lumen-framework": "5.1.*",
-        "vlucas/phpdotenv": "~1.0",
+        "php": ">=8.2",
+        "laravel/lumen-framework": "^10.0",
+        "vlucas/phpdotenv": "~5.4",
         "rmccue/requests": ">=1.0",
-        "ramsey/uuid": "^3.1"
+        "ramsey/uuid": "^4.7",
+        "nesbot/carbon": "^2.0.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.0",
-        "fzaninotto/faker": "~1.0"
+        "phpunit/phpunit": "~8.0",
+        "fzaninotto/faker": "~1.0",
+        "composer/composer": "^2.2",
+        "friendsofphp/php-cs-fixer": "^3.9"
     },
     "autoload": {
         "psr-4": {
@@ -29,6 +36,9 @@
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
     }
 }
