@@ -1,7 +1,8 @@
 <?php
+
 namespace App\Exceptions;
 
-use \App\Game;
+use App\Game;
 
 class BaseGameException extends \Exception
 {
@@ -17,5 +18,4 @@ class BaseGameException extends \Exception
     {
         return $this->game;
     }
-
 }

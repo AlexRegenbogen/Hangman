@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class WordTableSeeder extends Seeder
 {
@@ -9,13 +10,13 @@ class WordTableSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $words = file_get_contents('database/seeds/words.english');
         $words = explode("\n", $words);
 
         $batchSize = 250;
-        $totalItems = sizeof($words);
+        $totalItems = count($words);
         $data = [];
         for ($x = 0; $x <= ($totalItems-1); $x++)
         {

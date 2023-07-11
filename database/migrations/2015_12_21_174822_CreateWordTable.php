@@ -14,7 +14,7 @@ class CreateWordTable extends Migration
     {
         Schema::create('word', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('word', 255); 
+            $table->string('word', 50);
         });
     }
 

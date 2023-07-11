@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
@@ -15,8 +16,8 @@ class CreateGameTable extends Migration
         Schema::create('game', function (Blueprint $table) {
             $table->uuid('id')->unique();
             $table->smallInteger('tries_left');
-            $table->string('word', 255);
-            $table->string('status', 255);
+            $table->string('word', 50);
+            $table->string('status', 50);
         });
     }
 

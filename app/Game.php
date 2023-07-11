@@ -4,34 +4,36 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Requests;
-use \App\Exceptions\CharacterUsedException;
-use \App\Exceptions\GameOverException;
-use \App\Exceptions\GameWonException;
+use App\Exceptions\CharacterUsedException;
+use App\Exceptions\GameOverException;
+use App\Exceptions\GameWonException;
 
 class Game extends Model
 {
     use HasUuid;
 
-    const MASK_CHAR = '.';
+    public const MASK_CHAR = '.';
 
-    const MAX_TRIES = 6;
+    public const MAX_TRIES = 6;
 
     // Switch between database and API for word generation/selection
     //      1 - Use word-table in database,
     //      0 - will use API on SetGetGo
-    const USE_DATABASE = 0;
+    public const USE_DATABASE = 1;
 
-    const BUSY                 = 0;
-    const FAIL                 = 1;
-    const SUCCESS              = 2;
-    private $statusInformation = ["busy", "fail", "success"];
+    public const BUSY                 = 0;
+    public const FAIL                 = 1;
+    public const SUCCESS              = 2;
+    private array $statusInformation = ["busy", "fail", "success"];
 
     protected $table = 'game';
 
     public $incrementing = false;
     public $timestamps   = false;
 
-    protected $fillable = ['word'];
+    protected $fillable = [
+        'word'
+    ];
 
     protected $casts = [
         'characters_guessed' => 'array',
@@ -40,7 +42,8 @@ class Game extends Model
     public function __construct(array $attributes = [])
     {
         $attributes['word'] = $this->getRandomWord();
-        return parent::__construct($attributes);
+
+        parent::__construct($attributes);
     }
 
     public function getStatusAttribute($value)
@@ -50,11 +53,11 @@ class Game extends Model
 
     public static function startNew()
     {
-        $game                     = new self;
-        $game->tries_left         = self::MAX_TRIES;
-        $game->word               = $game->getRandomWord();
-        $game->status             = self::BUSY;
-        $game->characters_guessed = [];
+        $game = new self();
+        $game->setAttribute('tries_left', self::MAX_TRIES);
+        $game->setAttribute('word', $game->getRandomWord());
+        $game->setAttribute('status', self::BUSY);
+        $game->setAttribute('characters_guessed', []);
         $game->save();
         return $game;
     }
@@ -94,9 +97,9 @@ class Game extends Model
 
     private function getRandomWord()
     {
-        if (self::USE_DATABASE == 0) {
-            $request = Requests::get('http://randomword.setgetgo.com/get.php');
-            return strtolower($request->body);
+        if (self::USE_DATABASE === 0) {
+            $request = Requests::get('https://random-word-api.herokuapp.com/word');
+            return strtolower(json_decode($request->body)[0]);
         }
 
         return \App\Word::orderBy(\DB::raw('RAND()'))->first()->word;
