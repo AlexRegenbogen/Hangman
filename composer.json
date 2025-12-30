@@ -9,7 +9,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "rmccue/requests": ">=1.0",
         "ramsey/uuid": "^4.7",
         "nesbot/carbon": "^3.11.0",
@@ -27,7 +27,8 @@
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^11.5",
         "rector/swiss-knife": "^2.3",
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "tomasvotruba/type-coverage": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -133,4 +134,3 @@
     "minimum-stability": "stable",
     "prefer-stable": true
 }
-

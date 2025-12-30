@@ -8,16 +8,16 @@ use App\Game;
 
 class BaseGameException extends \Exception
 {
-    private $game;
+    private ?Game $game = null;
 
-    public function setGame(Game $game)
+    public function setGame(Game $game): static
     {
         $this->game = $game;
 
         return $this;
     }
 
-    public function getGame()
+    public function getGame(): ?Game
     {
         return $this->game;
     }

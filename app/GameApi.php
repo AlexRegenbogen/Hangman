@@ -4,30 +4,42 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Exceptions\BaseGameException;
+use App\Http\Resources\GameApiResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
+
 class GameApi
 {
-    private array $chars = [];
-
-    public static function startNew(): array
+    public static function startNew(string $locale = 'en'): GameApiResource
     {
-        return self::getStatus(Game::startNew());
+        return self::getStatus(Game::startNew($locale));
     }
 
-    public static function guess($id, $char): false|array|string
+    public static function resumeRunning(Game $game): GameApiResource
+    {
+        return self::getStatus($game);
+    }
+
+    public static function guess(string $id, string $char): JsonResponse
     {
         try {
-            $response = self::getStatus(Game::guess($id, $char));
-        } catch (Exceptions\BaseGameException $e) {
-            $response = self::getStatus($e->getGame(), $e->getMessage());
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            $response = json_encode(['error' => 'Game not found!'], \JSON_THROW_ON_ERROR);
+            return response()->json(self::getStatus(Game::guess($id, $char)));
+        } catch (BaseGameException $e) {
+            /** @var Game $game */
+            $game = $e->getGame();
+            return response()->json(self::getStatus($game, $e->getMessage()));
+        } catch (ModelNotFoundException) {
+            return response()->json(['error' => 'Game not found!'], \JSON_THROW_ON_ERROR);
         }
-
-        return $response;
     }
 
-    private static function getStatus($game, $error = null): array
+    private static function getStatus(Game $game, string $error = null): GameApiResource
     {
-        return (new ApiResponse($game, $error))->render();
+        if (null !== $error) {
+            $game->error = $error;
+        }
+
+        return new GameApiResource($game);
     }
 }

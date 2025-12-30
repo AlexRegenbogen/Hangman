@@ -1,5 +1,31 @@
 {
-  "dependencies": {
-    "vue": "^3.3.4"
+  "name": "relexed.com",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "coverage": "vitest --coverage ",
+    "lint": "eslint --config eslint.config.js resources/js/ --ignore-pattern resources/js/ziggy.js --fix",
+    "check-lint": "eslint --config eslint.config.js resources/js/  --ignore-pattern resources/js/ziggy.js",
+    "format": "prettier resources/js/  --write",
+    "check-format": "prettier resources/js/  --check --log-level silent"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@vitejs/plugin-vue": "^6.0.3",
+    "axios": "^1.9.0",
+    "eslint": "^9.39.2",
+    "fs-extra": "^11.3.3",
+    "laravel-vite-plugin": "^2.0.1",
+    "os": "^0.1.2",
+    "path": "^0.12.7",
+    "prettier": "^3.7.4",
+    "tailwindcss": "^4.1.18",
+    "vite": "^7.3.0",
+    "vitest": "^4.0.16",
+    "vue": "^3.3.4",
+    "vue-i18n": "^11.2.8"
   }
 }

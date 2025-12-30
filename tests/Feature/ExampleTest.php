@@ -16,6 +16,6 @@ final class ExampleTest extends TestCase
 
         /** @var string $content */
         $content = $response->getContent();
-        static::assertStringContainsString('', $content);
+        self::assertStringContainsString('', $content);
     }
 }

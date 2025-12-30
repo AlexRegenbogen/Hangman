@@ -7,89 +7,117 @@ namespace App;
 use App\Exceptions\CharacterUsedException;
 use App\Exceptions\GameOverException;
 use App\Exceptions\GameWonException;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Http;
 
+/**
+ * @property string $word
+ */
 class Game extends Model
 {
-    use HasUuid;
+    use HasUuids;
 
-    public const MASK_CHAR = '.';
+    protected $keyType = 'string';
 
-    public const MAX_TRIES = 6;
+    public const string MASK_CHAR = '.';
+
+    public const int MAX_TRIES = 6;
 
     // Switch between database and API for word generation/selection
     //      1 - Use word-table in database,
     //      0 - will use API on SetGetGo
-    public const USE_DATABASE = 1;
+    public const int USE_DATABASE = 1;
 
-    public const BUSY                 = 0;
-    public const FAIL                 = 1;
-    public const SUCCESS              = 2;
+    public const int BUSY = 0;
+
+    public const int FAIL = 1;
+
+    public const int SUCCESS = 2;
+
+    /** @var array|string[] */
     private array $statusInformation = ['busy', 'fail', 'success'];
+
+    public ?string $error = null;
 
     protected $table = 'game';
 
     public $incrementing = false;
-    public $timestamps   = false;
+
+    public $timestamps = false;
 
     protected $fillable = [
+        'id',
         'word',
+        'tries_left',
+        'characters_guessed',
+        'status',
     ];
 
     protected $casts = [
         'characters_guessed' => 'array',
     ];
 
-    public function __construct(array $attributes = [])
+    /** @return Attribute<string, string> */
+    protected function status(): Attribute
     {
-        $attributes['word'] = $this->getRandomWord();
-
-        parent::__construct($attributes);
+        return Attribute::make(
+            get: fn (mixed $value): string => $this->statusInformation[$value]
+        );
     }
 
-    public function getStatusAttribute($value)
-    {
-        return $this->statusInformation[$value];
-    }
-
-    public static function startNew()
+    public static function startNew(string $locale = 'en'): self
     {
         $game = new self();
-        $game->setAttribute('tries_left', self::MAX_TRIES);
-        $game->setAttribute('word', $game->getRandomWord());
-        $game->setAttribute('status', self::BUSY);
-        $game->setAttribute('characters_guessed', []);
+        $game->fill([
+            'word' => self::getRandomWord($locale),
+            'tries_left' => self::MAX_TRIES,
+            'characters_guessed' => [],
+            'status' => self::BUSY,
+        ]);
         $game->save();
 
         return $game;
     }
 
-    public static function guess($id, $char)
+    /**
+     * @throws GameWonException
+     * @throws CharacterUsedException
+     * @throws GameOverException
+     */
+    public static function guess(string $id, string $char): self
     {
-        $game  = self::where('status', self::BUSY)->findOrFail($id);
+        $game = self::where('status', self::BUSY)->findOrFail($id);
         $chars = $game->characters_guessed;
 
         if (\in_array(strtolower($char), $chars)) {
-            throw (new CharacterUsedException($char.' has already been used'))->setGame($game);
+            $game->error = \sprintf('Character %s already used!', $char);
+
+            return $game;
         }
 
-        if (!str_contains($game->word, $char)) {
+        if (!str_contains((string) $game->word, $char)) {
             --$game->tries_left;
         }
 
-        $chars[]                  = $char;
+        $chars[] = $char;
         $game->characters_guessed = $chars;
 
         if ($game->won()) {
             $game->status = self::SUCCESS;
             $game->save();
-            throw (new GameWonException('Congratulations! '.$game->word.' is the correct word.'))->setGame($game);
+            $game->error = \sprintf('Congratulations! %s is the correct word.', $game->word);
+
+            return $game;
         }
 
-        if ($game->tries_left <= 0) {
+        if (0 === $game->tries_left) {
             $game->status = self::FAIL;
             $game->save();
-            throw (new GameOverException('You lost. The word was: '.$game->word))->setGame($game);
+            $game->error = \sprintf('You lost. The word was: %s', $game->word);
+
+            return $game;
         }
 
         $game->save();
@@ -97,27 +125,26 @@ class Game extends Model
         return $game;
     }
 
-    private function getRandomWord()
+    private static function getRandomWord(string $locale = 'en'): string
     {
         if (self::USE_DATABASE === 0) {
-            $request = \Requests::get('https://random-word-api.herokuapp.com/word');
+            $response = Http::get('https://random-word-api.herokuapp.com/word?lang='.$locale);
 
-            return strtolower(json_decode($request->body)[0]);
+            return strtolower((string) json_decode((string) $response->getBody()[0]));
         }
 
-        return Word::orderBy(\DB::raw('RAND()'))->first()->word;
+        return Word::whereLocale($locale)->inRandomOrder()->first()->word;
     }
 
-    public function getWord()
+    public function getWord(): string
     {
-        $chars        = $this->characters_guessed;
+        $chars = $this->characters_guessed;
         $invalidChars = array_diff(range('a', 'z'), $chars);
-        $word         = str_replace($invalidChars, self::MASK_CHAR, $this->word);
 
-        return $word;
+        return str_replace($invalidChars, self::MASK_CHAR, $this->word);
     }
 
-    public function won()
+    public function won(): bool
     {
         return !str_contains($this->getWord(), self::MASK_CHAR);
     }

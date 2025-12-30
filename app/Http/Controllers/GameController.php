@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Game;
 use App\GameApi;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class GameController extends Controller
 {
-    public function startNewGame(): array
+    public function index(Request $request): View
     {
-        return GameApi::startNew();
+        $request->get('locale', 'en');
+
+        return view('game');
     }
 
-    /** @throws \JsonException */
-    public function guess($id, Request $request): false|array|string
+    public function continue(Game $game): View
     {
-        $char = $request->input('character');
-
-        return GameApi::guess($id, $char);
+        return view('game', ['game' => GameApi::resumeRunning($game)]);
     }
 }
