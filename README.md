@@ -35,9 +35,10 @@ Every response should contain the following fields:
 After cloning/downloading;
 - run [composer install] to retrieve the required dependencies;
 - create a .env file containing the database details (see .env.example)
+- generate an APP_KEY using: `php -r "echo md5(uniqid()).\"\n\";"`
 - php artisan migrate - To install the database tables
 - php artisan db::seed (only needed if using the word-generation from database option)
-- php artisan serve (to allow access to both the api and the frontend on http://localhost:8000)
+- php -S localhost:8000 -t public (to allow access to both the api and the frontend on http://localhost:8000)
 
 
 
