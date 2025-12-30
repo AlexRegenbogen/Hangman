@@ -1,95 +1,99 @@
-<!--  CSS and Canvas segment originally by: Lalwani Vikas https://twitter.com/LalwaniVikas -->
+/*
+ * CSS and Canvas segment originally by: Lalwani Vikas https://twitter.com/LalwaniVikas
+ */
 body {
-	font-family: 'Raleway', serif;
-	font-size: 100%;
-	margin: 2% auto;
-	background-color: #FFFAFA;
-	-webkit-user-select: none;  /* Chrome all / Safari all */
-	-moz-user-select: none;     /* Firefox all */
-	-ms-user-select: none;      /* IE 10+ */
-	user-select: none;          /* Likely future */
+    font-family: 'Raleway', serif;
+    font-size: 100%;
+    margin: 2% auto;
+    background-color: #FFFAFA;
+    -webkit-user-select: none; /* Chrome all / Safari all */
+    -moz-user-select: none; /* Firefox all */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none; /* Likely future */
 }
 
 #hangman {
-	font-family: 'Raleway', serif;
-	width: 300px;
-	margin-left: auto;
-	margin-right: auto;
+    font-family: 'Raleway', serif;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
 }
+
 h1 {
 
-	font-size: 1.2rem;
-	font-weight: 300;
-	text-align: center;
+    font-size: 1.2rem;
+    font-weight: 300;
+    text-align: center;
 }
 
 canvas {
-	border-bottom: 4px solid #607D8B;
-	margin: 5% auto;
+    border-bottom: 4px solid #607D8B;
+    margin: 5% auto;
 }
 
 .testWord {
-	font-family: monospace;
-	margin: 5% auto 10%;
-	text-align: center;
-	font-size: 2.4rem;
-	color: #4CAF50;
+    font-family: monospace;
+    margin: 5% auto 10%;
+    text-align: center;
+    font-size: 2.4rem;
+    color: #4CAF50;
 }
 
 
 .keyboard {
-	font-family: 'Raleway', serif;
-	margin: 0 auto;
-	text-align: center;
+    font-family: 'Raleway', serif;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .keyboard button, button.startNew {
-	display: inline-block;
-	width: 38px;
-	padding: 8px;
-	margin: 5px auto;
-	text-align: center;
-	border: 1px solid #000;
-	border-radius: 2px;
-	cursor: pointer;
-	transition: all 0.4s ease;
-	font-weight: 300;
-	font-size: 1.2rem;
+    display: inline-block;
+    width: 38px;
+    padding: 8px;
+    margin: 5px auto;
+    text-align: center;
+    border: 1px solid #000;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    font-weight: 300;
+    font-size: 1.2rem;
 }
 
 button.startNew {
-	width: 150px;
-	margin-left: 75px;
+    width: 150px;
+    margin-left: 75px;
 }
 
 .keyboard button:hover {
-	background-color: #000;
-	color: #fff;
+    background-color: #000;
+    color: #fff;
 }
+
 .keyboard button.used {
-	background-color: white;
+    background-color: white;
 }
 
 .keyboard button.used:hover {
-	background-color: white;
-	text-color: silver;
+    background-color: white;
+    text-color: silver;
 }
 
 .gameOver,
 .youWon {
-	position: absolute;
-	top: 20%;
-	margin: 0 auto;
-	width: 300px;
-	padding: 20px 0;
-	border: 1px solid #bbb;
-	text-align: center;
-	background-color: #eee;
-	box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1), 0 4px 8px 0 rgba(0,0,0,0.2);
-	cursor: pointer;
+    position: absolute;
+    top: 20%;
+    margin: 0 auto;
+    width: 300px;
+    padding: 20px 0;
+    border: 1px solid #bbb;
+    text-align: center;
+    background-color: #eee;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1), 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    cursor: pointer;
 }
 
 .gameOver h2, h3,
 .youWon h3 {
-	font-weight: 300;
+    font-weight: 300;
 }

@@ -4,13 +4,13 @@ In this assignment we ask you to implement a minimal version of a hangman API us
 
 ## Resources ##
 
-**/games (POST)**
+**/api/games (POST)**
 
 Start a new game
 
 - A list of words can be found in the MySQL database. At the start of the game a random word should be picked from this list.
 
-**/games/[:id] (PUT)**
+**/api/games/[:id] (PUT)**
 
 Guess a started game
 
