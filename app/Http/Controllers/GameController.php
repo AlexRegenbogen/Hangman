@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\GameApi;
 use Illuminate\Http\Request;
-use JsonException;
 
 class GameController extends Controller
 {
@@ -13,12 +14,11 @@ class GameController extends Controller
         return GameApi::startNew();
     }
 
-    /**
-     * @throws JsonException
-     */
+    /** @throws \JsonException */
     public function guess($id, Request $request): false|array|string
     {
         $char = $request->input('character');
+
         return GameApi::guess($id, $char);
     }
 }

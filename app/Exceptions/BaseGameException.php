@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use App\Game;
@@ -11,6 +13,7 @@ class BaseGameException extends \Exception
     public function setGame(Game $game)
     {
         $this->game = $game;
+
         return $this;
     }
 

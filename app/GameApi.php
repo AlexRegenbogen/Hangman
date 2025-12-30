@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 class GameApi
@@ -15,11 +17,12 @@ class GameApi
     {
         try {
             $response = self::getStatus(Game::guess($id, $char));
-        } catch (\App\Exceptions\BaseGameException $e) {
+        } catch (Exceptions\BaseGameException $e) {
             $response = self::getStatus($e->getGame(), $e->getMessage());
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            $response = json_encode(['error' => 'Game not found!'], JSON_THROW_ON_ERROR);
+            $response = json_encode(['error' => 'Game not found!'], \JSON_THROW_ON_ERROR);
         }
+
         return $response;
     }
 

@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class AddColumnGameTableGuessed extends Migration
 {
@@ -10,9 +12,9 @@ class AddColumnGameTableGuessed extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::table('game', function (Blueprint $table) {
+        Schema::table('game', function (Blueprint $table): void {
             $table->longText('characters_guessed');
         });
     }
@@ -22,9 +24,9 @@ class AddColumnGameTableGuessed extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::table('game', function ($table) {
+        Schema::table('game', function ($table): void {
             $table->dropColumn('characters_guessed');
         });
     }

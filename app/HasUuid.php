@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Ramsey\Uuid\Uuid;
@@ -11,9 +13,9 @@ trait HasUuid
      *
      * @return void
      */
-    public static function bootHasUuid()
+    public static function bootHasUuid(): void
     {
-        static::creating(function ($model) {
+        static::creating(function ($model): void {
             $model->incrementing = false;
             $model->{$model->getKeyName()} = (string) Uuid::uuid4();
         });

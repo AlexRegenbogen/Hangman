@@ -1,0 +1,19 @@
+includes:
+    - phpstan-baseline.neon
+parameters:
+  paths:
+    - app
+    - bootstrap
+    - config
+    - database
+    - public
+    - resources/lang
+    - routes
+    - tests
+  level: max
+  ignoreErrors:
+  type_coverage:
+      return: 90
+      param: 90
+      property: 90
+      constant: 90

@@ -1,19 +1,17 @@
 <?php
 
-namespace App\Http\Middleware;
+declare(strict_types=1);
 
-use Closure;
+namespace App\Http\Middleware;
 
 class ExampleMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
+     * @param \Illuminate\Http\Request $request
      */
-    public function handle($request, Closure $next)
+    public function handle($request, \Closure $next)
     {
         return $next($request);
     }

@@ -20,9 +20,9 @@
 			<div class="testWord">{{ game.word }}</div>
 
 			<div v-show="game.id" class="keyboard">
-				<?php foreach (range('a', 'z') as $k => $char): ?>
-				<button v-on:click="guess"><?=$char;?></button>
-				<?php endforeach;?>
+				<?php foreach (range('a', 'z') as $k => $char) { ?>
+				<button v-on:click="guess"><?php echo $char; ?></button>
+				<?php }?>
 			</div>
 		</div>
 
