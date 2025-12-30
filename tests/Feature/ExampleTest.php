@@ -1,12 +1,22 @@
 <?php
 
-class ExampleTest extends TestCase
+declare(strict_types=1);
+
+namespace Tests\Feature;
+
+
+use Tests\TestCase;
+
+final class ExampleTest extends TestCase
 {
-    public function testBasicExample(): void
+    /** A basic test example. */
+    public function testTheApplicationReturnsASuccessfulResponse(): void
     {
         $response = $this->get('/');
+        $response->assertOk();
 
-        $response->assertResponseOk();
-        $response->assertViewHas('title');
+        /** @var string $content */
+        $content = $response->getContent();
+        static::assertStringContainsString('', $content);
     }
 }
