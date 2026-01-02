@@ -8,9 +8,9 @@ use App\Enums\StatusInformation;
 use App\Models\Game;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Inertia\Testing\AssertableInertia as Assert;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
-use Inertia\Testing\AssertableInertia as Assert;
 
 final class GameControllerTest extends TestCase
 {
@@ -111,11 +111,11 @@ final class GameControllerTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertInertia(
-            static fn (Assert $page) => $page
+            static fn (Assert $page): Assert => $page
             ->component('Game')
             ->has(
                 'initialGame',
-                static fn (Assert $prop) => $prop
+                static fn (Assert $prop): Assert => $prop
                 ->where('id', $game->id)
                 ->where('word', '.a.a.e.')
                 ->where('tries_left', 5)

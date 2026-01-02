@@ -6,8 +6,11 @@ namespace Tests\Unit\Support;
 
 use App\Enums\StatusInformation;
 use App\Models\Game;
+use App\Models\Word;
 use App\Support\GameService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -25,7 +28,7 @@ final class GameServiceTest extends TestCase
 
         // Initialize service with test defaults
         $this->service = new GameService(
-            useDatabase: true, // Mocking API in this mode
+            useDatabase: false, // Mocking API in this mode
             maskChar: '.',
             maxTries: 6
         );
@@ -47,6 +50,35 @@ final class GameServiceTest extends TestCase
         self::assertEquals(6, $game->tries_left);
         self::assertEquals(StatusInformation::BUSY, $game->status);
         self::assertEmpty($game->characters_guessed);
+    }
+
+    #[Test]
+    public function itHandlesTheExceptionWhenStartingANewGameFetchingWordFromApi(): void
+    {
+        Http::fake([
+            'random-word-api.herokuapp.com/*' => static function (): never {
+                throw new ConnectionException('Connection timed out');
+            },
+        ]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Error establishing connection to random-word-api.herokuapp.com!');
+
+        $this->service->startNew('en');
+    }
+
+    #[Test]
+    public function itHandlesTheExceptionWhenStartingANewGameFetchingWordFromApiWithNonSupportedLanguage(): void
+    {
+        Http::fake([
+            'random-word-api.herokuapp.com/*' => Http::response(['Error' => 'No translation for this language']),
+        ]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Unsupported locale: xx. Supported locales: en, es, ro, it, de, fr, pt-br, zh');
+
+        $game = $this->service->startNew('xx');
+
     }
 
     #[Test]
@@ -95,7 +127,7 @@ final class GameServiceTest extends TestCase
         $updatedGame = GameService::processGuessedCharacter($game, 'x');
 
         self::assertEquals(StatusInformation::SUCCESS, $updatedGame->status);
-        self::assertStringContainsString('Congratulations', (string)$updatedGame->error);
+        self::assertStringContainsString('Congratulations', (string) $updatedGame->error);
     }
 
     #[Test]
@@ -112,7 +144,7 @@ final class GameServiceTest extends TestCase
 
         self::assertEquals(StatusInformation::FAIL, $updatedGame->status);
         self::assertEquals(0, $updatedGame->tries_left);
-        self::assertStringContainsString('You lost', (string)$updatedGame->error);
+        self::assertStringContainsString('You lost', (string) $updatedGame->error);
     }
 
     #[Test]
@@ -128,6 +160,6 @@ final class GameServiceTest extends TestCase
         $updatedGame = GameService::processGuessedCharacter($game, 'a');
 
         self::assertEquals(6, $updatedGame->tries_left);
-        self::assertStringContainsString('already used', (string)$updatedGame->error);
+        self::assertStringContainsString('already used', (string) $updatedGame->error);
     }
 }

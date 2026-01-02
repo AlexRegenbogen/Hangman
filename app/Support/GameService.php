@@ -8,11 +8,8 @@ use App\Enums\StatusInformation;
 use App\Http\Resources\GameApiResource;
 use App\Models\Game;
 use App\Models\Word;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final readonly class GameService
 {
@@ -98,11 +95,12 @@ final readonly class GameService
                     /** @var array<int, string> $json */
                     $json = $response->json();
                 } catch (ConnectionException) {
-
+                    throw new \RuntimeException('Error establishing connection to random-word-api.herokuapp.com!');
                 }
             } else {
-                throw new \RuntimeException('Translations in this language not available!');
+                throw new \RuntimeException('Unsupported locale: '.$locale.'. Supported locales: en, es, ro, it, de, fr, pt-br, zh');
             }
+
 
             return strtolower($json[0] ?? 'hangman');
         }
