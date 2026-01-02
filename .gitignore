@@ -4,3 +4,4 @@ node_modules
 .idea
 .phpunit.result.cache
 public/hot
+.php-cs-fixer.cache
