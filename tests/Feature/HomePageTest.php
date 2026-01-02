@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-final class ExampleTest extends TestCase
+final class HomePageTest extends TestCase
 {
-    /** A basic test example. */
-    public function testTheApplicationReturnsASuccessfulResponse(): void
+    #[Test]
+    public function theApplicationReturnsASuccessfulResponse(): void
     {
         $response = $this->get('/');
         $response->assertOk();

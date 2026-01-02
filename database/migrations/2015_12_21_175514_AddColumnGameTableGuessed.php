@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 class AddColumnGameTableGuessed extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    /** Run the migrations. */
     public function up(): void
     {
         Schema::table('game', function (Blueprint $table): void {
@@ -18,12 +16,10 @@ class AddColumnGameTableGuessed extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    /** Reverse the migrations. */
     public function down(): void
     {
-        Schema::table('game', function ($table): void {
+        Schema::table('game', function (Blueprint $table): void {
             $table->dropColumn('characters_guessed');
         });
     }

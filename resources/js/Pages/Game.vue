@@ -1,32 +1,58 @@
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import axios from "axios";
 import { useHangmanCanvas } from "../Composables/useHangmanCanvas";
+import {useToast} from "vue-toast-notification";
 
 const {canvasRef, initContext, clear, drawStand, updateVisuals} = useHangmanCanvas();
 
+const props = defineProps({
+  initialGame: {
+    type: Object,
+    default: () => ({ status: 'idle', word: '', tries_left: 6 })
+  }
+});
+
 const alphabet = [...'abcdefghijklmnopqrstuvwxyz'];
-const game = ref({status: 'idle', word: '', tries_left: 6});
+const game = ref(props.initialGame);
 const guessedLetters = ref([]);
 const locale = ref('en');
 
 const isBusy = computed(() => game.value.status === 'busy');
 
+const $toast = useToast();
+
+watch(() => props.initialGame, (newGame) => {
+  if (newGame) {
+    game.value = newGame;
+  }
+}, { immediate: true });
+
 onMounted(() => {
   initContext();
   drawStand();
+
+  // If we resumed a game, draw the current state of the hangman
+  if (game.value.status === 'busy' && game.value.tries_left < 6) {
+    for (let i = 6; i > game.value.tries_left; i--) {
+      updateVisuals(i - 1);
+    }
+  }
 });
 
 const startNewGame = async () => {
-  try {
-    const {data} = await axios.post('/api/games', {locale: locale.value});
+    const {data} = await axios.post('/api/games', {locale: locale.value})
+        .catch((error) => {
+          const message = error.response?.data?.message || "Error starting new game!";
+          $toast.error(message);
+        });
     game.value = data.data || data;
     guessedLetters.value = [];
+
+    window.history.pushState({}, '', `/${game.value.id}`);
+
     clear();
     drawStand();
-  } catch (error) {
-    console.error("Failed to start game:", error);
-  }
 };
 
 const toggleLocale = () => {
@@ -46,7 +72,8 @@ const guess = async (letter) => {
       updateVisuals(game.value.tries_left);
     }
   } catch (error) {
-    console.error("Error submitting guess:", error);
+    const message = error.response?.data?.message || "Error submitting guess!";
+    $toast.error(message);
   }
 };
 </script>
@@ -87,12 +114,21 @@ const guess = async (letter) => {
   </div>
 
   <div v-if="game.status === 'fail'" class="gameOver" @click="startNewGame">
-    <h2>{{ game.error || 'GAME OVER' }}</h2>
-    <h3>Click to try again.</h3>
+    <div class="youLost">
+      <h2>{{ game.error || 'GAME OVER' }}</h2>
+      <h3>Click to try again.</h3>
+    </div>
   </div>
 
-  <div v-if="game.status === 'success'" class="youWon" @click="startNewGame">
-    <h2>Victory!</h2>
-    <h3>Great job! Click to play again.</h3>
+  <div v-if="game.status === 'success'" class="gameOver" @click="startNewGame">
+    <div class="youWon">
+      <h2>Victory!</h2>
+      <h3>Great job! Click to play again.</h3>
+    </div>
+    <div id="fireworks">
+      <div class="firework"></div>
+      <div class="firework"></div>
+      <div class="firework"></div>
+    </div>
   </div>
 </template>

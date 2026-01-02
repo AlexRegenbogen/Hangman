@@ -33,4 +33,7 @@
     <env name="TELESCOPE_ENABLED" value="false"/>
     <env name="NIGHTWATCH_ENABLED" value="false"/>
   </php>
+  <extensions>
+    <bootstrap class="DG\BypassFinals\PHPUnitExtension"/>
+  </extensions>
 </phpunit>

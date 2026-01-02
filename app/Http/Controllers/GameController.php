@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Game;
-use App\GameApi;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Models\Game;
+use App\Support\GameService;
+use Inertia\Inertia;
+use Inertia\Response;
 
-class GameController extends Controller
+final class GameController extends Controller
 {
-    public function index(Request $request): View
+    public function index(): Response
     {
-        $request->get('locale', 'en');
-
-        return view('game');
+        return Inertia::render('Game', []);
     }
 
-    public function continue(Game $game): View
+    public function continue(Game $game): Response
     {
-        return view('game', ['game' => GameApi::resumeRunning($game)]);
+        return Inertia::render('Game', [
+            'initialGame' => GameService::resumeRunning($game)->resolve(),
+        ]);
     }
 }

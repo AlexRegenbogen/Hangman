@@ -1,0 +1,20 @@
+{
+  "resources/css/hangman.css": {
+    "file": "assets/hangman-C5_5t5qg.css",
+    "src": "resources/css/hangman.css",
+    "isEntry": true,
+    "name": "hangman",
+    "names": [
+      "hangman.css"
+    ]
+  },
+  "resources/js/hangman.js": {
+    "file": "assets/hangman-mLzVDHXv.js",
+    "name": "hangman",
+    "src": "resources/js/hangman.js",
+    "isEntry": true,
+    "css": [
+      "assets/hangman-C5_5t5qg.css"
+    ]
+  }
+}

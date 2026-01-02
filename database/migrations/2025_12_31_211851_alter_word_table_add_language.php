@@ -3,19 +3,20 @@
 declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class () extends Migration {
     public function up(): void
     {
-        Schema::table('word', function ($table): void {
-            $table->string('locale')->after('id')->length(2);
+        Schema::table('word', static function (Blueprint $table): void {
+            $table->string('locale', 2)->after('id');
         });
     }
 
     public function down(): void
     {
-        Schema::table('word', function ($table): void {
+        Schema::table('word', static function (Blueprint $table): void {
             $table->dropColumn('locale');
         });
     }

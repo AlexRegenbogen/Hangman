@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector;
+use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
+use Rector\CodingStyle\Rector\Closure\StaticClosureRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
@@ -49,6 +51,8 @@ return static function (RectorConfig $rectorConfig): void {
         NumericReturnTypeFromStrictReturnsRector::class,
         AddVoidReturnTypeWhereNoReturnRector::class,
         SingleInArrayToCompareRector::class,
+        StaticClosureRector::class,
+        StaticArrowFunctionRector::class,
     ]);
     $rectorConfig->skip([
         ReturnNeverTypeRector::class, // Throws off testing with PHPunit.

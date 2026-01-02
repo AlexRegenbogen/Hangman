@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
-use App\Game;
+use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin Game  */
-class GameApiResource extends JsonResource
+final class GameApiResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

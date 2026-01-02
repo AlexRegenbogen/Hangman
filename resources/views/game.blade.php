@@ -7,8 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='//fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
     @vite(['resources/js/hangman.js'])
+    @inertiaHead
 </head>
 <body>
-	<div id="hangman"></div>
+    @inertia('hangman')
+    <div id="hangman"></div>
 </body>
 </html>

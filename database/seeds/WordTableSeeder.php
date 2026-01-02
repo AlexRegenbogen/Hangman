@@ -17,6 +17,9 @@ class WordTableSeeder extends Seeder
 
         foreach ($localesToImport as $locale => $fileExtension) {
             $words = file_get_contents('database/seeds/words.'.$fileExtension);
+            if (false === $words) {
+                abort(500, 'Could not read words file');
+            }
             $words = explode("\n", $words);
 
             $batchSize = 250;

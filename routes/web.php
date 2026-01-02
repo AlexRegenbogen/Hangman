@@ -7,4 +7,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [GameController::class, 'index']);
 
-Route::get('/{game}', [GameController::class, 'continueGame']);
+Route::get('/{game}', [GameController::class, 'continue']);
