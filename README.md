@@ -1,3 +1,6 @@
+![Build Status](https://github.com/AlexRegenbogen/Hangman/actions/workflows/laravel.yml/badge.svg?branch=master)
+![Coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/AlexRegenbogen/faf9d179a61bd8b01f85a3b723116727/raw/coverage.json)
+
 # Hangman API #
 
 In this assignment we ask you to implement a minimal version of a hangman API using the following resources below:
