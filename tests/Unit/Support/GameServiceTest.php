@@ -6,11 +6,9 @@ namespace Tests\Unit\Support;
 
 use App\Enums\StatusInformation;
 use App\Models\Game;
-use App\Models\Word;
 use App\Support\GameService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -77,7 +75,7 @@ final class GameServiceTest extends TestCase
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Unsupported locale: xx. Supported locales: en, es, ro, it, de, fr, pt-br, zh');
 
-        $game = $this->service->startNew('xx');
+        $this->service->startNew('xx');
 
     }
 

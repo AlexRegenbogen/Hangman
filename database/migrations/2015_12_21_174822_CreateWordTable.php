@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateWordTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    /** Run the migrations. */
     public function up(): void
     {
         Schema::create('word', function (Blueprint $table): void {
@@ -19,9 +17,7 @@ class CreateWordTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    /** Reverse the migrations. */
     public function down(): void
     {
         Schema::drop('word');

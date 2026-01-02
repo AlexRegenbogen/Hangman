@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateGameTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    /** Run the migrations. */
     public function up(): void
     {
         Schema::create('game', function (Blueprint $table): void {
@@ -20,9 +18,7 @@ class CreateGameTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+    /** Reverse the migrations. */
     public function down(): void
     {
         Schema::drop('game');

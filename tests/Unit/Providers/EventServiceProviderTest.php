@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Unit\Providers;
 
 use App\Providers\EventServiceProvider;
@@ -13,7 +15,7 @@ final class EventServiceProviderTest extends TestCase
     {
         $provider = new EventServiceProvider($this->app);
 
-        $this->assertInstanceOf(EventServiceProvider::class, $provider);
-        $this->assertFalse($provider->shouldDiscoverEvents());
+        self::assertInstanceOf(EventServiceProvider::class, $provider);
+        self::assertFalse($provider->shouldDiscoverEvents());
     }
 }
