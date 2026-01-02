@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
-        php-version: '8.0'
+        php-version: '8.3'
     - uses: actions/checkout@v4
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -32,4 +32,43 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: php artisan test
+      run: php -d pcov.enabled=1 artisan test --coverage --min=75 --log-junit report.xml --coverage-clover coverage.xml --coverage-html html-report
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: report.xml
+    - name: Upload Coverage Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: html-report/
+    - name: Extract coverage percentage
+      id: extract_coverage
+      run: |
+        # Use PHP to parse the clover.xml and calculate the percentage
+        PERCENTAGE=$(php -r '$xml = simplexml_load_file("coverage.xml"); $metrics = $xml->project->metrics; echo round((((float)$metrics["coveredstatements"] + (float)$metrics["coveredmethods"] + (float)$metrics["coveredconditionals"]) / ((float)$metrics["statements"] + (float)$metrics["methods"] + (float)$metrics["conditionals"])) * 100, 2);')
+        echo "percentage=$PERCENTAGE" >> $GITHUB_OUTPUT
+        
+        # Set a color based on the percentage
+        if (( $(echo "$PERCENTAGE >= 80" | bc -l) )); then
+          echo "color=green" >> $GITHUB_OUTPUT
+        elif (( $(echo "$PERCENTAGE >= 50" | bc -l) )); then
+          echo "color=orange" >> $GITHUB_OUTPUT
+        else
+          echo "color=red" >> $GITHUB_OUTPUT
+        fi
+    - name: Make Badge
+      uses: schneegans/dynamic-badges-action@v1.7.0
+      with:
+        auth: ${{ secrets.GIST_TOKEN }}
+        gistID: faf9d179a61bd8b01f85a3b723116727
+        filename: coverage.json
+        label: Coverage
+        message: ${{ steps.extract_coverage.outputs.percentage }}%
+        color: ${{ steps.extract_coverage.outputs.color }}
+        valColorRange: ${{ steps.coverage.outputs.percentage }}
+        maxColorRange: 100
+        minColorRange: 0
