@@ -1,0 +1,9 @@
+{
+  "game": {
+    "title": "Galgje in Vue v3 (Laravel API backend)",
+    "victory": "Gewonnen!",
+    "click_to_play_again": "Top! Klik om opnieuw te spelen.",
+    "gameOver": "GAME OVER",
+    "current_locale": "Huidig spel in:"
+  }
+}

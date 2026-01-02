@@ -1,0 +1,9 @@
+{
+  "game": {
+    "title": "Hangman in Vue v3 (Laravel API backend)",
+    "victory": "Victory!",
+    "click_to_play_again": "Great job! Click to play again.",
+    "gameOver": "GAME OVER",
+    "current_locale": "Current game in:"
+  }
+}

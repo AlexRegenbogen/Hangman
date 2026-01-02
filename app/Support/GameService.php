@@ -90,7 +90,7 @@ final readonly class GameService
 
     private function getRandomWord(string $locale = 'en'): string
     {
-        if ($this->useDatabase) {
+        if (!$this->useDatabase) {
             if (\in_array($locale, ['en', 'es', 'ro', 'it', 'de', 'fr', 'pt-br', 'zh'], true)) {
                 try {
                     $response = Http::get('https://random-word-api.herokuapp.com/word?lang='.$locale);
