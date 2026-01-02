@@ -9,18 +9,28 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=8.2",
-        "laravel/lumen-framework": "^10.0",
-        "vlucas/phpdotenv": "~5.4",
-        "rmccue/requests": ">=1.0",
+        "php": "^8.3",
+        "inertiajs/inertia-laravel": "^2.0",
+        "laravel/framework": "^12.44",
+        "nesbot/carbon": "^3.11.0",
         "ramsey/uuid": "^4.7",
-        "nesbot/carbon": "^2.0.0"
+        "rmccue/requests": ">=1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~8.0",
-        "fzaninotto/faker": "~1.0",
-        "composer/composer": "^2.2",
-        "friendsofphp/php-cs-fixer": "^3.9"
+        "brianium/paratest": "^7.8",
+        "dg/bypass-finals": "^1.9",
+        "driftingly/rector-laravel": "^2.1",
+        "fakerphp/faker": "^1.23",
+        "friendsofphp/php-cs-fixer": "^3.92",
+        "larastan/larastan": "^3.8",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.6",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.5",
+        "rector/swiss-knife": "^2.3",
+        "roave/security-advisories": "dev-latest",
+        "tomasvotruba/type-coverage": "^2.1"
     },
     "autoload": {
         "psr-4": {
@@ -35,10 +45,94 @@
             "tests/"
         ]
     },
-    "config": {
-        "preferred-install": "dist",
-        "allow-plugins": {
-            "kylekatarnls/update-helper": true
+    "scripts": {
+        "php-cs-fixer": [
+            "vendor/bin/php-cs-fixer fix"
+        ],
+        "phpstan": [
+            "@php vendor/bin/phpstan analyse --memory-limit=-1"
+        ],
+        "rector": [
+            "@php vendor/bin/rector"
+        ],
+        "setup": [
+            "composer install",
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate",
+            "@php artisan migrate --force",
+            "npm install",
+            "npm run build"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
+        ],
+        "test": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ],
+        "pre-package-uninstall": [
+            "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "deploy-cmd": [
+            "@php composer install",
+            "npm install",
+            "npm run buiid",
+            "@php artisan storage:link --quiet",
+            "@php artisan key:generate --ansi",
+            "@php artisan migrate --graceful --ansi",
+            "@php artisan db:seed"
+        ],
+        "style": [
+            "@php vendor/bin/php-cs-fixer fix app --dry-run"
+        ],
+        "style-fix": "@php vendor/bin/php-cs-fixer fix app",
+        "test-all": [
+            "composer php-cs-fixer",
+            "composer rector",
+            "composer phpstan",
+            "composer check-coverage"
+        ],
+        "unit": [
+            "@php -d pcov.enabled=1 artisan test --parallel --coverage --min=75"
+        ],
+        "check-coverage": [
+            "@php -d pcov.enabled=1 artisan test --coverage --min=75"
+        ],
+        "visualize-coverage": [
+            "@php vendor/bin/phpunit --coverage-html storage/coverage/"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
         }
-    }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

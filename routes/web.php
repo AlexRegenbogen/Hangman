@@ -1,24 +1,10 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
-$router->get('/', function () {
-    return view('game');
-});
+declare(strict_types=1);
 
+use App\Http\Controllers\GameController;
+use Illuminate\Support\Facades\Route;
 
+Route::get('/', [GameController::class, 'index']);
 
-// games
-$router->post('games', 'GameController@startNewGame');
-
-
-// games/[:id]
-$router->put('games/{id}', 'GameController@guess');
+Route::get('/{game}', [GameController::class, 'continue']);

@@ -1,24 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\GameApi;
-use Illuminate\Http\Request;
-use JsonException;
+use App\Models\Game;
+use App\Support\GameService;
+use Inertia\Inertia;
+use Inertia\Response;
 
-class GameController extends Controller
+final class GameController extends Controller
 {
-    public function startNewGame(): array
+    public function index(): Response
     {
-        return GameApi::startNew();
+        return Inertia::render('Game', []);
     }
 
-    /**
-     * @throws JsonException
-     */
-    public function guess($id, Request $request): false|array|string
+    public function continue(Game $game): Response
     {
-        $char = $request->input('character');
-        return GameApi::guess($id, $char);
+        return Inertia::render('Game', [
+            'initialGame' => GameService::resumeRunning($game)->resolve(),
+        ]);
     }
 }
