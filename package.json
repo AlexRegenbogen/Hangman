@@ -13,17 +13,17 @@
     "check-format": "prettier resources/js/  --check --log-level silent"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.18",
+    "@tailwindcss/vite": "^4.3.1",
     "@vitejs/plugin-vue": "^6.0.3",
     "axios": "^1.16.1",
     "eslint": "^9.39.2",
     "fs-extra": "^11.3.3",
-    "laravel-vite-plugin": "^2.0.1",
+    "laravel-vite-plugin": "^3.1.0",
     "os": "^0.1.2",
     "path": "^0.12.7",
     "prettier": "^3.7.4",
     "tailwindcss": "^4.1.18",
-    "vite": "^7.3.2",
+    "vite": "^8.0.16",
     "vitest": "^4.1.0",
     "vue": "^3.3.4",
     "vue-i18n": "^11.2.8"
